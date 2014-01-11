@@ -40,3 +40,12 @@
 [submodule "megacz/coq-categories"]
 	path = megacz/coq-categories
 	url = http://git.megacz.com/coq-categories.git
+[submodule "HoTT/coq"]
+	path = HoTT/coq
+	url = https://github.com/HoTT/coq.git
+[submodule "coq/coq-8.4"]
+	path = coq/coq-8.4
+	url = https://github.com/coq/coq.git
+[submodule "benediktahrens/coq-fossil"]
+	path = benediktahrens/coq-fossil
+	url = https://github.com/JasonGross/benediktahrens-coq-fossil.git
