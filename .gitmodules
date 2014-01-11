@@ -49,3 +49,6 @@
 [submodule "benediktahrens/coq-fossil"]
 	path = benediktahrens/coq-fossil
 	url = https://github.com/JasonGross/benediktahrens-coq-fossil.git
+[submodule "coq/coq-8.3"]
+	path = coq/coq-8.3
+	url = https://github.com/coq/coq.git
