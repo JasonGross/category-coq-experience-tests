@@ -1,0 +1,42 @@
+[submodule "HoTT--HoTT"]
+	path = HoTT--HoTT
+	url = https://github.com/HoTT/HoTT.git
+[submodule "benediktahrens--coinductives"]
+	path = benediktahrens--coinductives
+	url = https://github.com/benediktahrens/coinductives
+[submodule "benediktahrens--rezk_completion"]
+	path = benediktahrens--rezk_completion
+	url = https://github.com/benediktahrens/rezk_completion
+[submodule "HoTT/HoTT"]
+	path = HoTT/HoTT
+	url = https://github.com/HoTT/HoTT.git
+[submodule "benediktahrens/coinductives"]
+	path = benediktahrens/coinductives
+	url = https://github.com/benediktahrens/coinductives.git
+[submodule "benediktahrens/rezk_completion"]
+	path = benediktahrens/rezk_completion
+	url = https://github.com/benediktahrens/rezk_completion.git
+[submodule "benediktahrens/Foundations"]
+	path = benediktahrens/Foundations
+	url = https://github.com/benediktahrens/Foundations.git
+[submodule "pcapriotti/agda-categories"]
+	path = pcapriotti/agda-categories
+	url = https://github.com/pcapriotti/agda-categories.git
+[submodule "jmchapman/restriction-categories"]
+	path = jmchapman/restriction-categories
+	url = https://github.com/jmchapman/restriction-categories.git
+[submodule "konn/category-agda"]
+	path = konn/category-agda
+	url = https://github.com/konn/category-agda.git
+[submodule "copumpkin/categories"]
+	path = copumpkin/categories
+	url = https://github.com/copumpkin/categories.git
+[submodule "crypto-agda/crypto-agda"]
+	path = crypto-agda/crypto-agda
+	url = https://github.com/crypto-agda/crypto-agda.git
+[submodule "rs-/Triangles"]
+	path = rs-/Triangles
+	url = https://github.com/rs-/Triangles.git
+[submodule "megacz/coq-categories"]
+	path = megacz/coq-categories
+	url = http://git.megacz.com/coq-categories.git
