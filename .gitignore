@@ -4,3 +4,4 @@
 *.v.d
 *.vo
 *.glob
+ConCaT/Makefile.coq
