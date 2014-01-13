@@ -1,3 +1,6 @@
 *.stats
 *.timing
 *.timing-raw
+*.v.d
+*.vo
+*.glob

@@ -5,11 +5,11 @@ all: timing stats
 .PHONY: all clean git-clean HoTT-coq coqs coq-8.3 coq-8.4 stats timing
 
 clean:
-	rm -f HoTT/HoTT.timing-raw HoTT/HoTT.timing megacz/coq-categories.timing-raw megacz/coq-categories.timing megacz/coq-categories.stats benediktahrens/coq-fossil.timing-raw benediktahrens/coq-fossil.timing benediktahrens/coq-fossil.stats
+	rm -f HoTT/HoTT.timing-raw HoTT/HoTT.timing megacz/coq-categories.timing-raw megacz/coq-categories.timing megacz/coq-categories.stats benediktahrens/coq-fossil.timing-raw benediktahrens/coq-fossil.timing benediktahrens/coq-fossil.stats ConCaT.timing ConCaT.stats
 
-stats: HoTT/HoTT.stats megacz/coq-categories.stats benediktahrens/coq-fossil.stats
+stats: HoTT/HoTT.stats megacz/coq-categories.stats benediktahrens/coq-fossil.stats ConCaT.stats
 
-timing: HoTT/HoTT.timing megacz/coq-categories.timing benediktahrens/coq-fossil.timing
+timing: HoTT/HoTT.timing megacz/coq-categories.timing benediktahrens/coq-fossil.timing ConCaT.timing
 
 git-clean: clean
 	git submodule foreach 'git clean -xfd'
@@ -87,7 +87,7 @@ megacz/coq-categories/build/Makefile.coq: $(megacz_coq-categories_coqfiles)
 	cd megacz/coq-categories; rm -f build/*.v
 	cd megacz/coq-categories; rm -f build/*.d
 	cd megacz/coq-categories/build; ln -s ../src/*.v .
-	cd megacz/coq-categories/build; ../../../coq/coq-8.3/bin/coq_makefile COQC = '"/usr/bin/time" -f "$$* (user: %U mem: %M ko)" $$(COQBIN)coqc' *.v > Makefile.coq
+	cd megacz/coq-categories/build; ../../../coq/coq-8.3/bin/coq_makefile COQC = '"/usr/bin/time" -f "$$* (user: %U mem: %M ko)" $$(COQBIN)coqc' *.v -o Makefile.coq
 
 megacz/coq-categories.stats: $(megacz_coq-categories_coqfiles)
 	(cd megacz/coq-categories/src; find . -name "*.v" | xargs ../../../make-stats.sh | sed s'/, }/}/g') | tee $@
@@ -102,7 +102,21 @@ benediktahrens/coq-fossil.timing-raw: benediktahrens/coq-fossil/Makefile.coq coq
 
 benediktahrens/coq-fossil/Makefile.coq: benediktahrens/coq-fossil/Make
 	cd benediktahrens/coq-fossil; ../../coq/coq-8.3/bin/coq_makefile -f Make COQC = '"/usr/bin/time" -f "$$* (user: %U mem: %M k\
-o)" $$(COQBIN)coqc' > Makefile.coq
+o)" $$(COQBIN)coqc' -o Makefile.coq
 
 benediktahrens/coq-fossil.stats: $(benediktahrens_coq-fossil_coqfiles)
 	(cd benediktahrens/coq-fossil; find . -name "*.v" | xargs ../../make-stats.sh | sed s'/, }/}/g') | tee $@
+
+################################################################################
+##                                ConCaT                                      ##
+################################################################################
+concat_coqfiles := $(shell find ConCaT -name "*.v")
+
+ConCaT.timing-raw: $(concat_coqfiles) ConCaT/Makefile.coq coq/coq-8.4/bin/coqc
+	(cd ConCaT; $(MAKE) -f Makefile.coq clean; $(MAKE) COQBIN=../coq/coq-8.4/bin/ -f Makefile.coq 2>&1) | tee $@
+
+ConCaT/Makefile.coq: $(concat_coqfiles)
+	cd ConCaT; ../coq/coq-8.4/bin/coq_makefile -f Make COQC = '"/usr/bin/time" -f "$$* (user: %U mem: %M ko)" $$(COQBIN)coqc' -o Makefile.coq
+
+ConCaT.stats: $(concat_coqfiles)
+	(cd ConCaT; find . -name "*.v" | xargs ../make-stats.sh | sed s'/, }/}/g') | tee $@
