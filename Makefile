@@ -74,6 +74,41 @@ coqs: coq-8.3 coq-8.4 HoTT-coq
 
 
 ################################################################################
+##                                  Agda                                      ##
+################################################################################
+Agda/configure: Agda/configure.ac
+	cd Agda; autoreconf -fvi
+
+Agda/Makefile: Agda/configure
+	cd Agda; ./configure
+
+Agda/cabal.sandbox.config:
+	cd Agda; cabal sandbox init
+
+Agda/.cabal-sandbox/bin/agda: Agda/configure Agda/cabal.sandbox.config
+	cd Agda; $(MAKE)
+
+agda: Agda/.cabal-sandbox/bin/agda
+
+################################################################################
+##                                Agda-2.3.2.2                                  ##
+################################################################################
+
+Agda-2.3.2.2/cabal.sandbox.config:
+	mkdir -p Agda-2.3.2.2; cd Agda-2.3.2.2; cabal sandbox init
+
+Agda-2.3.2.2/.cabal-sandbox/bin/agda: Agda-2.3.2.2/cabal.sandbox.config
+	cd Agda-2.3.2.2; cabal install Agda-2.3.2.2
+
+################################################################################
+##                                  agda-lib                                  ##
+################################################################################
+agda-lib/src/%.agdai: agda-lib/src/%.agda Agda/.cabal-sandbox/bin/agda
+	cd agda-lib/src; ../../Agda/.cabal-sandbox/bin/agda ${<:agda-lib/src/%=%}
+
+agda-stdlib: agda-lib/src/Algebra.agdai agda-lib/src/Coinduction.agdai agda-lib/src/Function.agdai agda-lib/src/Induction.agdai agda-lib/src/IO.agdai agda-lib/src/Irrelevance.agdai agda-lib/src/Level.agdai agda-lib/src/Record.agdai agda-lib/src/Reflection.agdai agda-lib/src/Size.agdai agda-lib/src/Universe.agdai
+
+################################################################################
 ##                         megacz/coq-categories                              ##
 ################################################################################
 megacz_coq-categories_coqfiles := $(shell find megacz/coq-categories/src -name \*.v)
