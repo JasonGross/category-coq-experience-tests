@@ -4,4 +4,6 @@
 *.v.d
 *.vo
 *.glob
+*.agdai
+Agda-2.3.2.2/
 ConCaT/Makefile.coq

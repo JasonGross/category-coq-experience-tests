@@ -108,6 +108,21 @@ agda-lib/src/%.agdai: agda-lib/src/%.agda Agda/.cabal-sandbox/bin/agda
 
 agda-stdlib: agda-lib/src/Algebra.agdai agda-lib/src/Coinduction.agdai agda-lib/src/Function.agdai agda-lib/src/Induction.agdai agda-lib/src/IO.agdai agda-lib/src/Irrelevance.agdai agda-lib/src/Level.agdai agda-lib/src/Record.agdai agda-lib/src/Reflection.agdai agda-lib/src/Size.agdai agda-lib/src/Universe.agdai
 
+
+################################################################################
+##                                  lib-0.7                                  ##
+################################################################################
+lib-0.7/src/%.agdai: lib-0.7/src/%.agda Agda-2.3.2.2/.cabal-sandbox/bin/agda
+	cd lib-0.7/src; ../../Agda-2.3.2.2/.cabal-sandbox/bin/agda ${<:lib-0.7/src/%=%}
+
+agda-stdlib-0.7: lib-0.7/src/Algebra.agdai lib-0.7/src/Coinduction.agdai lib-0.7/src/Function.agdai lib-0.7/src/Induction.agdai lib-0.7/src/IO.agdai lib-0.7/src/Irrelevance.agdai lib-0.7/src/Level.agdai lib-0.7/src/Record.agdai lib-0.7/src/Reflection.agdai lib-0.7/src/Size.agdai lib-0.7/src/Universe.agdai
+
+################################################################################
+##                         compumpkin/categories                              ##
+################################################################################
+copumpkin/categories.timing-agda-raw: agda-stdlib-0.7 Agda-2.3.2.2/.cabal-sandbox/bin/agda
+	(cd copumpkin/categories; find . -name "*.agdai" | xargs rm; ../../Agda-2.3.2.2/.cabal-sandbox/bin/agda Everything.agda -i . -i ../../lib-0.7/src/) | ./insert-times.sh | tee $@
+
 ################################################################################
 ##                         megacz/coq-categories                              ##
 ################################################################################
