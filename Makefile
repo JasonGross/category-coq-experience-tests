@@ -17,6 +17,9 @@ git-clean: clean
 %.timing: %.timing-raw
 	grep 'user' $< | grep -v 'usr/bin/time' | sed s'/\(.*\) (user: \(.*\) mem: \(.*\) ko)$$/"\1":{"user":\2, "mem":\3},/g' | tr '\n' ' ' | sed s'/^\(.*\), $$/{\1}\n/g' | tee $@
 
+%.timing-agda: %.timing-agda-raw
+	cat $< | python format-agda-times.py | tr '\n' ' ' | sed s'/, }/}/g' | tee $@
+
 ################################################################################
 ##                                 HoTT/HoTT                                  ##
 ################################################################################
@@ -122,7 +125,7 @@ agda-stdlib-0.7: lib-0.7/src/Algebra.agdai lib-0.7/src/Coinduction.agdai lib-0.7
 ################################################################################
 copumpkin_categories_files := $(shell find copumpkin/categories -name "*.agda")
 
-copumpkin/categories.timing-agda-raw: agda-stdlib-0.7 Agda-2.3.2.2/.cabal-sandbox/bin/agda $(copumpkin_categories_files)
+copumpkin/categories.timing-agda-raw: agda-stdlib-0.7 Agda-2.3.2.2/.cabal-sandbox/bin/agda $(copumpkin_categories_files) insert-times.sh
 	(cd copumpkin/categories; find . -name "*.agdai" | xargs rm; ../../Agda-2.3.2.2/.cabal-sandbox/bin/agda Everything.agda -i . -i ../../lib-0.7/src/) | ./insert-times.sh | tee $@
 
 ################################################################################
