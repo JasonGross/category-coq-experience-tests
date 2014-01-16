@@ -58,6 +58,17 @@ coq/coq-8.3/bin/coqc: coq/coq-8.3 coq/coq-8.3/config/Makefile
 coq-8.3: coq/coq-8.3/bin/coqc
 
 ################################################################################
+##                          coq/coq-8.3pl2-foundations                        ##
+################################################################################
+coq/coq-8.3pl2-foundations/config/Makefile: coq/coq-8.3pl2-foundations/configure
+	cd coq/coq-8.3pl2-foundations && ./configure -local -with-doc no -coqide no
+
+coq/coq-8.3pl2-foundations/bin/coqc: coq/coq-8.3pl2-foundations coq/coq-8.3pl2-foundations/config/Makefile
+	cd coq/coq-8.3pl2-foundations && $(MAKE)
+
+coq-8.3pl2-foundations: coq/coq-8.3pl2-foundations/bin/coqc
+
+################################################################################
 ##                               coq/coq-8.4                                  ##
 ################################################################################
 coq/coq-8.4/config/Makefile: coq/coq-8.4/configure
@@ -73,7 +84,7 @@ coq-8.4: coq/coq-8.4/bin/coqc
 ################################################################################
 ##                                      coqs                                  ##
 ################################################################################
-coqs: coq-8.3 coq-8.4 HoTT-coq
+coqs: coq-8.3 coq-8.4 HoTT-coq coq-8.3pl2-foundations
 
 
 ################################################################################
