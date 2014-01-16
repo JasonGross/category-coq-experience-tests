@@ -42,7 +42,7 @@ HoTT/coq/config/Makefile: HoTT/coq/configure
 	cd HoTT/coq && ./configure -local -no-native-compiler -nodoc -coqide no
 
 HoTT/coq/bin/coqc: HoTT/coq HoTT/coq/config/Makefile
-	cd HoTT/coq && $(MAKE) coqlight
+	cd HoTT/coq && $(MAKE) coqlight && $(MAKE) install
 
 HoTT-coq: HoTT/coq/bin/coqc
 
@@ -53,7 +53,7 @@ coq/coq-8.3/config/Makefile: coq/coq-8.3/configure
 	cd coq/coq-8.3 && ./configure -local -with-doc no -coqide no
 
 coq/coq-8.3/bin/coqc: coq/coq-8.3 coq/coq-8.3/config/Makefile
-	cd coq/coq-8.3 && $(MAKE)
+	cd coq/coq-8.3 && $(MAKE) && $(MAKE) install
 
 coq-8.3: coq/coq-8.3/bin/coqc
 
@@ -64,7 +64,7 @@ coq/coq-8.3pl2-foundations/config/Makefile: coq/coq-8.3pl2-foundations/configure
 	cd coq/coq-8.3pl2-foundations && ./configure -local -with-doc no -coqide no
 
 coq/coq-8.3pl2-foundations/bin/coqc: coq/coq-8.3pl2-foundations coq/coq-8.3pl2-foundations/config/Makefile
-	cd coq/coq-8.3pl2-foundations && $(MAKE)
+	cd coq/coq-8.3pl2-foundations && $(MAKE) GOTO_STAGE=2 coqbinaries states && $(MAKE) install
 
 coq-8.3pl2-foundations: coq/coq-8.3pl2-foundations/bin/coqc
 
@@ -75,7 +75,7 @@ coq/coq-8.4/config/Makefile: coq/coq-8.4/configure
 	cd coq/coq-8.4 && ./configure -local -with-doc no -coqide no
 
 coq/coq-8.4/bin/coqc: coq/coq-8.4 coq/coq-8.4/config/Makefile
-	cd coq/coq-8.4 && $(MAKE)
+	cd coq/coq-8.4 && $(MAKE) && $(MAKE) install
 
 coq-8.4: coq/coq-8.4/bin/coqc
 
