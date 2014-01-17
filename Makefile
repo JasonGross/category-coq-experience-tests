@@ -7,9 +7,9 @@ all: timing stats
 clean:
 	rm -f HoTT/HoTT.timing-raw HoTT/HoTT.timing megacz/coq-categories.timing-raw megacz/coq-categories.timing megacz/coq-categories.stats benediktahrens/coq-fossil.timing-raw benediktahrens/coq-fossil.timing benediktahrens/coq-fossil.stats ConCaT.timing ConCaT.stats
 
-stats: HoTT/HoTT.stats megacz/coq-categories.stats benediktahrens/coq-fossil.stats ConCaT.stats
+stats: HoTT/HoTT.stats megacz/coq-categories.stats benediktahrens/coq-fossil.stats ConCaT.stats copumpkin/categories.stats
 
-timing: HoTT/HoTT.timing megacz/coq-categories.timing benediktahrens/coq-fossil.timing ConCaT.timing
+timing: HoTT/HoTT.timing megacz/coq-categories.timing benediktahrens/coq-fossil.timing ConCaT.timing copumpkin/categories.timing-agda
 
 git-clean: clean
 	git submodule foreach 'git clean -xfd'
@@ -139,6 +139,9 @@ copumpkin_categories_files_i := ${copumpkin_categories_files:%.agda=%.agdai}
 
 copumpkin/categories.timing-agda-raw: agda-stdlib-0.7 Agda-2.3.2.2/.cabal-sandbox/bin/agda $(copumpkin_categories_files) insert-times.sh
 	(cd copumpkin/categories; find . -name "*.agdai" | xargs rm; for i in Everything.agda $$(find . -name "*.agda" | tr '\n' ' '); do ../../Agda-2.3.2.2/.cabal-sandbox/bin/agda "$$i" -i . -i ../../lib-0.7/src/; done) | ./insert-times.sh | tee $@
+
+copumpkin/categories.stats: $(copumpkin_categories_coqfiles)
+	(cd copumpkin/categories; find . -name "*.agda" | xargs ../../make-agda-stats.sh | sed s'/, }/}/g') | tee $@
 
 ################################################################################
 ##                         megacz/coq-categories                              ##
