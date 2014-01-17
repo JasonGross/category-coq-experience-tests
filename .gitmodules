@@ -58,3 +58,6 @@
 [submodule "agda-lib"]
 	path = agda-lib
 	url = https://github.com/JasonGross/agda-stdlib.git
+[submodule "coq/coq-8.4-foundations"]
+	path = coq/coq-8.4-foundations
+	url = https://github.com/DanGrayson/coq.git
