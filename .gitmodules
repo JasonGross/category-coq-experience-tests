@@ -61,3 +61,6 @@
 [submodule "coq/coq-8.4-foundations"]
 	path = coq/coq-8.4-foundations
 	url = https://github.com/DanGrayson/coq.git
+[submodule "DanGrayson/Foundations2"]
+	path = DanGrayson/Foundations2
+	url = https://github.com/DanGrayson/Foundations2.git
