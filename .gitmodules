@@ -64,3 +64,6 @@
 [submodule "DanGrayson/Foundations2"]
 	path = DanGrayson/Foundations2
 	url = https://github.com/DanGrayson/Foundations2.git
+[submodule "DanGrayson/rezk_completion"]
+	path = DanGrayson/rezk_completion
+	url = https://github.com/DanGrayson/rezk_completion.git
