@@ -67,3 +67,6 @@
 [submodule "DanGrayson/rezk_completion"]
 	path = DanGrayson/rezk_completion
 	url = https://github.com/DanGrayson/rezk_completion.git
+[submodule "DanGrayson/coq-builder"]
+	path = DanGrayson/coq-builder
+	url = https://github.com/DanGrayson/coq-builder.git
