@@ -6,7 +6,7 @@ echo "Stats: {" | tr '\n' ' '
 for i in "$@"
 do
     echo "\"$i\":{" | tr '\n' ' '
-    echo "'definitions':$(grep '^\s*\(Definition\|Lemma\|Theorem\|Corollary\|Remark\|Fact\|Proposition\|Example\|Fixpoint\|CoFixpoint\|Inductive\|CoInductive\|Instance\)' "$i" | wc -l)," | tr '\n' ' '
+    echo "'definitions':$(grep '^\s*\(Global\s\+\|Program\s\+\)*\(Definition\|Lemma\|Theorem\|Corollary\|Remark\|Fact\|Proposition\|Example\|Fixpoint\|CoFixpoint\|Inductive\|CoInductive\|Instance\)' "$i" | wc -l)," | tr '\n' ' '
     echo "'lines':$(wc -l < "$i")," | tr '\n' ' '
     echo "'characters':$(wc -c < "$i")," | tr '\n' ' '
     echo "'words':$(wc -w < "$i")," | tr '\n' ' '

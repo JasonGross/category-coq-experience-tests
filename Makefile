@@ -2,7 +2,7 @@ HOTT_HOTT_CONFIGURE_ARGUMENTS :=
 
 all: timing stats
 
-.PHONY: all clean git-clean HoTT-coq coqs coq-8.3 coq-8.4 stats timing coq-8.4-foundations
+.PHONY: all clean git-clean HoTT-coq coqs coq-8.3 coq-8.4 stats timing coq-8.4-foundations foundations-files
 
 clean:
 	rm -f HoTT/HoTT.timing-raw HoTT/HoTT.timing megacz/coq-categories.timing-raw megacz/coq-categories.timing megacz/coq-categories.stats benediktahrens/coq-fossil.timing-raw benediktahrens/coq-fossil.timing benediktahrens/coq-fossil.stats ConCaT.timing ConCaT.stats
@@ -72,8 +72,11 @@ coq-8.4: coq/coq-8.4/bin/coqc
 ################################################################################
 ##                         coq/coq-8.4-foundations                            ##
 ################################################################################
-foundations_files := $(shell find coq/Foundations -name "*.v")
-coq_8_4_foundations_files := ${foundations_files:coq/%=coq/coq-8.4-foundations/lib/coq/user-contrib/%}
+foundations_files := $(shell find DanGrayson/Foundations2 -name "*.v")
+coq_8_4_foundations_files := ${foundations_files:DanGrayson/Foundations2/%=coq/coq-8.4-foundations/lib/coq/user-contrib/Foundations/%}
+
+foundations-files: $(foundations_files) coq/coq-8.4-foundations/bin/coqc
+	cd DanGrayson/Foundations2; $(MAKE) COQC=../../coq/coq-8.4-foundations/bin/coqc COQBIN=../../coq/coq-8.4-foundations/bin/ && $(MAKE) COQC=../../coq/coq-8.4-foundations/bin/coqc COQBIN=../../coq/coq-8.4-foundations/bin/ install
 
 coq/coq-8.4-foundations/config/Makefile: coq/coq-8.4-foundations/configure
 	cd coq/coq-8.4-foundations && ./configure -local -with-doc no -coqide no
@@ -186,15 +189,39 @@ benediktahrens/coq-fossil.stats: $(benediktahrens_coq-fossil_coqfiles)
 ##                    benediktahrens/rezk_completion                          ##
 ################################################################################
 benediktahrens_rezk_completion_coqfiles := $(shell find benediktahrens/rezk_completion -name \*.v)
+#benediktahrens_rezk_completion_foundations_files := ${foundations_files:DanGrayson/Foundations2/%=benediktahrens/rezk_completion/%}
 
-benediktahrens/rezk_completion.timing-raw: benediktahrens/rezk_completion/Makefile.coq coq/coq-8.4-foundations/bin/coqc $(coq_8_4_foundations_files)
+
+benediktahrens/rezk_completion.timing-raw: benediktahrens/rezk_completion/Makefile.coq coq/coq-8.4-foundations/bin/coqc $(coq_8_4_foundations_files) #$(benediktahrens_rezk_completion_foundations_files)
 	(cd benediktahrens/rezk_completion; $(MAKE) -f Makefile.coq clean; $(MAKE) COQBIN=../../coq/coq-8.4-foundations/bin/ -f Makefile.coq 2>&1) | tee $@
 
 benediktahrens/rezk_completion/Makefile.coq: benediktahrens/rezk_completion/Make coq/coq-8.4-foundations/bin/coqc
 	cd benediktahrens/rezk_completion; ../../coq/coq-8.4-foundations/bin/coq_makefile -f Make COQC = '"/usr/bin/time" -f "$$* (user: %U mem: %M ko)" $$(COQBIN)coqc' -o Makefile.coq
 
-benediktahrens/rezk_completion.stats: $(benediktahrens_rezk_completion_coqfiles)
+benediktahrens/rezk_completion.stats: $(benediktahrens_rezk_completion_coqfiles) #$(benediktahrens_rezk_completion_foundations_files)
 	(cd benediktahrens/rezk_completion; find . -name "*.v" | xargs ../../make-stats.sh | sed s'/, }/}/g') | tee $@
+
+#benediktahrens/rezk_completion/Foundations/%.vo: coq/Foundations/%.vo
+#	mkdir -p "$$(dirname $@)"; cp "$<" "$@"
+
+################################################################################
+##                      DanGrayson/rezk_completion                            ##
+################################################################################
+DanGrayson_rezk_completion_coqfiles := $(shell find DanGrayson/rezk_completion -name \*.v)
+#DanGrayson_rezk_completion_foundations_files := ${foundations_files:DanGrayson/Foundations2/%=DanGrayson/rezk_completion/%}
+
+
+DanGrayson/rezk_completion.timing-raw: DanGrayson/rezk_completion/Makefile.coq coq/coq-8.4-foundations/bin/coqc $(coq_8_4_foundations_files) #$(DanGrayson_rezk_completion_foundations_files)
+	(cd DanGrayson/rezk_completion; $(MAKE) -f Makefile.coq clean; $(MAKE) COQBIN=../../coq/coq-8.4-foundations/bin/ -f Makefile.coq 2>&1) | tee $@
+
+DanGrayson/rezk_completion/Makefile.coq: DanGrayson/rezk_completion/Make coq/coq-8.4-foundations/bin/coqc
+	cd DanGrayson/rezk_completion; ../../coq/coq-8.4-foundations/bin/coq_makefile -f Make COQC = '"/usr/bin/time" -f "$$* (user: %U mem: %M ko)" $$(COQBIN)coqc' -o Makefile.coq
+
+DanGrayson/rezk_completion.stats: $(DanGrayson_rezk_completion_coqfiles) #$(DanGrayson_rezk_completion_foundations_files)
+	(cd DanGrayson/rezk_completion; find . -name "*.v" | xargs ../../make-stats.sh | sed s'/, }/}/g') | tee $@
+
+#DanGrayson/rezk_completion/Foundations/%.vo: coq/Foundations/%.vo
+#	mkdir -p "$$(dirname $@)"; cp "$<" "$@"
 
 ################################################################################
 ##                                ConCaT                                      ##
