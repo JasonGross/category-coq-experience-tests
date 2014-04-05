@@ -2,7 +2,7 @@ HOTT_HOTT_CONFIGURE_ARGUMENTS :=
 
 all: timing stats
 
-.PHONY: all clean git-clean HoTT-coq coqs coq-8.3 coq-8.4 stats timing coq-8.4-foundations foundations-files
+.PHONY: all clean git-clean HoTT-coq coqs coq-8.3 coq-8.3pl5-foundations coq-8.4 stats timing coq-8.4-foundations foundations-files
 
 clean:
 	rm -f HoTT/HoTT.timing-raw HoTT/HoTT.timing megacz/coq-categories.timing-raw megacz/coq-categories.timing megacz/coq-categories.stats benediktahrens/coq-fossil.timing-raw benediktahrens/coq-fossil.timing benediktahrens/coq-fossil.stats ConCaT.timing ConCaT.stats
@@ -56,6 +56,17 @@ coq/coq-8.3/bin/coqc: coq/coq-8.3 coq/coq-8.3/config/Makefile
 	cd coq/coq-8.3 && $(MAKE)
 
 coq-8.3: coq/coq-8.3/bin/coqc
+
+################################################################################
+##                        coq/coq-8.3pl5-foundations                          ##
+################################################################################
+coq/coq-8.3pl5-foundations/config/Makefile: coq/coq-8.3/configure
+	cd coq/coq-8.3 && ./configure -local -with-doc no -coqide no
+
+coq/coq-8.3pl5-foundations/bin/coqc: coq/coq-8.3 coq/coq-8.3/config/Makefile
+	cd coq/coq-8.3 && $(MAKE)
+
+coq-8.3pl5-foundations: coq/coq-8.3pl5-foundations/bin/coqc
 
 ################################################################################
 ##                               coq/coq-8.4                                  ##
