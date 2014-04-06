@@ -12,15 +12,14 @@ diff -ur ../coq-8.3pl2-patched/configure ./configure
  DATE=`LANG=C date +"%B %Y"`
 @@ -323,8 +323,8 @@
  if [ "$MAKE" != "" ]; then
-   MAKEVERSION=`$MAKE -v | head -1`
-   case $MAKEVERSION in
--    "GNU Make 3.8"[12])
--      echo "You have GNU Make >= 3.81. Good!";;
-+    "GNU Make 3.8"[1-9] | "GNU Make 3.8"[1-9].* | "GNU Make 3."[0-9]  | "GNU Make 3."[0-9].* | "GNU Make "[4-9].* )
-+      echo "You have GNU Make $MAKEVERSION >= 3.81. Good!";;
-     *)
+   MAKEVERSION=`$MAKE -v | head -1 | cut -d" " -f3`
+   MAKEVERSIONMAJOR=`echo $MAKEVERSION | cut -d. -f1`
+   MAKEVERSIONMINOR=`echo $MAKEVERSION | cut -d. -f2`
+-  if [ "$MAKEVERSIONMAJOR" -eq 3 -a "$MAKEVERSIONMINOR" -ge 81 ]; then
++  if [ "$MAKEVERSIONMAJOR" -gt 3 -o "$MAKEVERSIONMAJOR" -eq 3 -a "$MAKEVERSIONMINOR" -ge 81 ]; then
+       echo "You have GNU Make $MAKEVERSION. Good!"
+   else
        OK="no"
-       if [ -x ./make ]; then
 diff -ur ../coq-8.3pl2-patched/pretyping/evd.ml ./pretyping/evd.ml
 --- ../coq-8.3pl2-patched/pretyping/evd.ml	2011-03-10 09:50:24.000000000 -0600
 +++ ./pretyping/evd.ml	2011-09-11 06:30:25.000000000 -0500
