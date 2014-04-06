@@ -110,14 +110,14 @@ coq-8.4-foundations: coq/coq-8.4-foundations/bin/coqc $(coq_8_4_foundations_file
 ################################################################################
 ##                           coq 8.3 Foundations                              ##
 ################################################################################
-foundations83_files := $(shell find DanGrayson/Foundations2-83 -name "*.v")
-coq_8_3_foundations_files := ${foundations_files:DanGrayson/Foundations2-83/%=coq-builder/encap-2/coq83patched-latest/lib/coq/user-contrib/Foundations/%}
+#foundations83_files := $(shell find DanGrayson/Foundations2-83 -name "*.v")
+coq_8_3_foundations_files := coq-builder/encap-2/coq83patched-latest/lib/coq/user-contrib/Foundations/hlevel2/stnfsets.vo #${foundations_files:DanGrayson/Foundations2-83/%=coq-builder/encap-2/coq83patched-latest/lib/coq/user-contrib/Foundations/%}
 
-foundations-8.3-files: $(foundations83_files) coq-builder/encap-2/coq83patched-latest/bin/coqtop
+foundations-8.3-files: coq-builder/encap-2/coq83patched-latest/bin/coqtop
 	cd DanGrayson/Foundations2-83; $(MAKE) COQC=../../coq-builder/encap-2/coq83patched-latest/bin/coqc COQBIN=../../coq-builder/encap-2/coq83patched-latest/bin/ && $(MAKE) COQC=../../coq-builder/encap-2/coq83patched-latest/bin/coqc COQBIN=../../coq-builder/encap-2/coq83patched-latest/bin/ install
 
-coq-builder/encap-2/coq83patched-latest/lib/coq/user-contrib/Foundations/%.v: DanGrayson/Foundations2-83/%.v
-	mkdir -p "$$(dirname $@)"; cp "$<" "$@"
+coq-builder/encap-2/coq83patched-latest/lib/coq/user-contrib/Foundations/hlevel2/stnfsets.vo: coq-builder/encap-2/coq83patched-latest/bin/coqtop
+	cd coq-builder; $(MAKE) -C src install-Foundations2
 
 ################################################################################
 ##                                      coqs                                  ##
@@ -143,7 +143,7 @@ Agda/.cabal-sandbox/bin/agda: Agda/configure Agda/cabal.sandbox.config
 agda: Agda/.cabal-sandbox/bin/agda
 
 ################################################################################
-##                                Agda-2.3.2.2                                  ##
+##                              Agda-2.3.2.2                                  ##
 ################################################################################
 
 Agda-2.3.2.2/cabal.sandbox.config:
@@ -250,6 +250,24 @@ DanGrayson/rezk_completion.stats: $(DanGrayson_rezk_completion_coqfiles) #$(DanG
 	(cd DanGrayson/rezk_completion; find . -name "*.v" | xargs ../../make-stats.sh | sed s'/, }/}/g') | tee $@
 
 #DanGrayson/rezk_completion/Foundations/%.vo: coq/Foundations/%.vo
+#	mkdir -p "$$(dirname $@)"; cp "$<" "$@"
+
+################################################################################
+##                           arxiv/rezk_completion                            ##
+################################################################################
+arxiv_rezk_completion_coqfiles := $(shell find arxiv/rezk -name \*.v)
+#DanGrayson_rezk_completion_foundations_files := ${foundations_files:DanGrayson/Foundations2/%=DanGrayson/rezk_completion/%}
+
+arxiv/rezk.timing-raw: arxiv/rezk/Makefile.coq coq-builder/encap-2/coq83patched-latest/bin/coqtop $(coq_8_3_foundations_files)
+	(cd arxiv/rezk; $(MAKE) -f Makefile.coq clean; $(MAKE) COQBIN=../../coq-builder/encap-2/coq83patched-latest/bin/ -f Makefile.coq 2>&1) | tee $@
+
+arxiv/rezk/Makefile.coq: arxiv/rezk/Make coq-builder/encap-2/coq83patched-latest/bin/coqtop
+	cd arxiv/rezk; ../../coq-builder/encap-2/coq83patched-latest/bin/coq_makefile -f Make COQC = '"/usr/bin/time" -f "$$* (user: %U mem: %M ko)" $$(COQBIN)coqc' -o Makefile.coq
+
+arxiv/rezk.stats: $(arxiv_rezk_completion_coqfiles) #$(DanGrayson_rezk_completion_foundations_files)
+	(cd arxiv/rezk; find . -name "*.v" | xargs ../../make-stats.sh | sed s'/, }/}/g') | tee $@
+
+#arxiv/rezk/Foundations/%.vo: coq/Foundations/%.vo
 #	mkdir -p "$$(dirname $@)"; cp "$<" "$@"
 
 ################################################################################
