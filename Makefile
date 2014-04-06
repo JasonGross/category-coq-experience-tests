@@ -2,7 +2,7 @@ HOTT_HOTT_CONFIGURE_ARGUMENTS :=
 
 all: timing stats
 
-.PHONY: all clean git-clean HoTT-coq coqs coq-8.3 coq-8.3pl5-foundations coq-8.4 stats timing coq-8.4-foundations foundations-files
+.PHONY: all clean git-clean HoTT-coq coqs coq-8.3 coq-8.3pl5-foundations coq-8.4 stats timing coq-8.4-foundations foundations-files foundations-8.3-files
 
 clean:
 	rm -f HoTT/HoTT.timing-raw HoTT/HoTT.timing megacz/coq-categories.timing-raw megacz/coq-categories.timing megacz/coq-categories.stats benediktahrens/coq-fossil.timing-raw benediktahrens/coq-fossil.timing benediktahrens/coq-fossil.stats ConCaT.timing ConCaT.stats
@@ -69,6 +69,13 @@ coq/coq-8.3pl5-foundations/bin/coqc: coq/coq-8.3pl5-foundations coq/coq-8.3pl5-f
 coq-8.3pl5-foundations: coq/coq-8.3pl5-foundations/bin/coqc
 
 ################################################################################
+##                     encap-2/coq83patched-latest/bin/coqtop                 ##
+################################################################################
+
+coq-builder/encap-2/coq83patched-latest/bin/coqtop: coq-builder/Makefile
+	cd coq-builder; $(MAKE) -C src install-coq83patched
+
+################################################################################
 ##                               coq/coq-8.4                                  ##
 ################################################################################
 coq/coq-8.4/config/Makefile: coq/coq-8.4/configure
@@ -100,6 +107,17 @@ coq/coq-8.4-foundations/lib/coq/user-contrib/%.v: coq/%.v
 
 coq-8.4-foundations: coq/coq-8.4-foundations/bin/coqc $(coq_8_4_foundations_files)
 
+################################################################################
+##                           coq 8.3 Foundations                              ##
+################################################################################
+foundations83_files := $(shell find DanGrayson/Foundations2-83 -name "*.v")
+coq_8_3_foundations_files := ${foundations_files:DanGrayson/Foundations2-83/%=coq-builder/encap-2/coq83patched-latest/lib/coq/user-contrib/Foundations/%}
+
+foundations-8.3-files: $(foundations83_files) coq-builder/encap-2/coq83patched-latest/bin/coqtop
+	cd DanGrayson/Foundations2-83; $(MAKE) COQC=../../coq-builder/encap-2/coq83patched-latest/bin/coqc COQBIN=../../coq-builder/encap-2/coq83patched-latest/bin/ && $(MAKE) COQC=../../coq-builder/encap-2/coq83patched-latest/bin/coqc COQBIN=../../coq-builder/encap-2/coq83patched-latest/bin/ install
+
+coq-builder/encap-2/coq83patched-latest/lib/coq/user-contrib/Foundations/%.v: DanGrayson/Foundations2-83/%.v
+	mkdir -p "$$(dirname $@)"; cp "$<" "$@"
 
 ################################################################################
 ##                                      coqs                                  ##
