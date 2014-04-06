@@ -60,11 +60,11 @@ coq-8.3: coq/coq-8.3/bin/coqc
 ################################################################################
 ##                        coq/coq-8.3pl5-foundations                          ##
 ################################################################################
-coq/coq-8.3pl5-foundations/config/Makefile: coq/coq-8.3/configure
-	cd coq/coq-8.3 && ./configure -local -with-doc no -coqide no
+coq/coq-8.3pl5-foundations/config/Makefile: coq/coq-8.3pl5-foundations/configure
+	cd coq/coq-8.3pl5-foundations && ./configure -local -with-doc no -coqide no
 
-coq/coq-8.3pl5-foundations/bin/coqc: coq/coq-8.3 coq/coq-8.3/config/Makefile
-	cd coq/coq-8.3 && $(MAKE)
+coq/coq-8.3pl5-foundations/bin/coqc: coq/coq-8.3pl5-foundations coq/coq-8.3pl5-foundations/config/Makefile
+	cd coq/coq-8.3pl5-foundations && $(MAKE)
 
 coq-8.3pl5-foundations: coq/coq-8.3pl5-foundations/bin/coqc
 
